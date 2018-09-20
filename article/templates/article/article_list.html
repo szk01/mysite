@@ -1,0 +1,115 @@
+{#代码重用#}
+{% extends 'base.html' %}
+
+{# 页面标题 #}
+{% block title%}
+   我的网站
+{% endblock%}
+
+{% block nav_article_active%}active{% endblock%}
+
+{% load staticfiles %} {# 加载css文件需要的库 #}
+{% block header_extends %}
+    <link rel="stylesheet"  href="{% static 'article/article.css' %}">
+{% endblock %}
+
+{# 页面内容 #}
+{% block content %}
+
+    {#博客列表8md#}
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-8 col-md-8 col-lg-10">
+                <div class="panel panel-default">
+                    <div class="panel-heading">{% block article_list_title %}<h3>我的博客 {% endblock %}</h3></div>
+                    <div class="panel-body">
+                            {% for article in articles %}
+                            <div class="article">
+                                 <h3><a href="{% url 'article_detail' article.pk %}">
+                                    {{article.title}} <br>
+                                </a></h3>
+                                <p class="article-info">
+                                    <span class="glyphicon glyphicon-tag"></span> <a href="{% url 'articles_with_type' article.article_type.pk %}">{{ article.article_type }}</a>&nbsp
+                                    <span class="glyphicon glyphicon-time"></span>{{article.created_time}}&nbsp;&nbsp
+                                    阅读({{article.get_read_num }})
+                                </p>
+                                <p>{{ article.content|truncatechars:120 }}</p>
+                        <br>
+                            </div>
+                       
+                            {% empty %}
+                                <p>--暂无博客，敬请期待--</p>
+                            {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+             {#博客分类4md#}
+            <div class="hidden-xs col-sm-8 col-md-4 col-lg-2">
+                <div class="panel panel-default">
+                    <div class="panel-heading"><h4>博客分类</h4></div>
+                    <div class="panel-body">
+                        <ul class="articles-type" >
+                            {% for article_type in article_types %}
+                                <li><a href="{% url 'articles_with_type' article_type.pk %}">
+                                    {{ article_type.type_name }}({{ article_type.article_count }})</a></li>
+                            {% empty %}
+                                <li>--暂无分类--</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        {#页码#}
+        <div class="paginator" >
+            <ul class="pagination">
+                <li>
+                    {# 上一页 #}
+                    {% if page_of_articles.has_previous%}
+                        <a href="?page={{ page_of_articles.previous_page_number }}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    {% else %}
+                        <span aria-hidden="true">&laquo;</span>
+                    {% endif %}
+                </li>
+
+                {# 全部页码 #}
+                {% for page_num in page_range %}
+                    {% if page_num == page_of_articles.number %}
+                        <li class="active"><a href="?page={{ page_num }}">{{ page_num }}</a></li>
+                    {% else %}
+                        {% if page_num == '...'%}
+                            <li ><span>{{ page_num }}</span></li>
+                        {% else %}
+                            <li><a href="?page={{ page_num }}">{{ page_num }}</a></li>
+                        {% endif %}
+
+                    {% endif %}
+
+                {% endfor %}
+
+                <li>
+                    {# 下一页 #}
+                    {% if page_of_articles.has_next %}
+                    <a href="?page={{ page_of_articles.next_page_number }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                    {% else %}
+                        <span aria-hidden="true">&raquo;</span>
+                    {% endif%}
+                </li>
+            </ul>
+            <p>共有{{ page_of_articles.paginator.count }}篇博客，
+            当前第{{ page_of_articles.number }}页，共{{ page_of_articles.paginator.num_pages }}页</p>
+        </div>
+
+
+
+
+{% endblock %}
+
+

@@ -1,0 +1,19 @@
+h3.home-content{
+    font-size: 222%;
+    text-align: center;
+    margin-top: 4em;
+    margin-bottom: 2em;
+}
+  {{# 这些设置否没有用，不知道为什么 #}}
+div#container{
+    margin: 0  auto;   {{#自动适应#}}
+    height: 20em;
+    width: 30em;
+    text-align: center;
+}
+
+div.hot-data{
+  text-align:center;
+  margin-top: 4em;
+  margin-right: 10px;
+}

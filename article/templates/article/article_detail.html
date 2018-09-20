@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{# 页面标题 #}
+{% block title%}
+    {{ article.title }}
+{% endblock%}
+
+{% block nav_article_active%}active{% endblock%}
+
+{% load staticfiles %} {# 加载css文件需要的库 #}
+{% block header_extends %}
+    <link rel="stylesheet"  href="{% static 'article/article.css' %}">
+{% endblock %}
+
+{# 页面内容 #}
+{% block content %}
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-10 col-xs-offset-1">
+				<h3>{{article.title}}</h3>
+				<ul class="article-info-description">
+					<li>作者：{{ article.author }}</li>
+				    <li>发表日期：{{ article.created_time|date:"Y-m-d H:n:s" }}</li>
+				    <li>分类：<a href="{% url 'articles_with_type' article.article_type.pk %}">{{ article.article_type.type_name }}</a></li>
+					<li>阅读：{{ article.get_read_num }}</li>
+				</ul>
+				    <div class="article-content">{{ article.content|safe }}</div>
+					<div class="article-more">
+						<p>上一篇:
+							{% if previous_article%}
+								<a href="{% url 'article_detail' previous_article.pk %}">{{previous_article.title}}</a>
+							{% else %}
+								没有了
+							{% endif %}
+						</p>
+						<p>下一篇:
+							{% if next_article%}
+								<a href="{% url 'article_detail' next_article.pk %}">{{next_article.title}}</a>
+							{% else %}
+								没有了
+							{% endif %}
+						</p>
+					</div>
+				    
+			</div>	
+		</div>
+	</div>
+    
+{% endblock %}
+

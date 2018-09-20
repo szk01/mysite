@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title%}
+    三千的个人网站|首页
+{% endblock%}
+
+{#加上整个index页面的样式#}
+{% block header_extends %}
+    <link rel="stylesheet" href="{% static 'index.css' %}">
+    <script src="http://cdn.hcharts.cn/highcharts/highcharts.js"></script>
+{%endblock%}
+
+{% block nav_home_active%}active{% endblock%}   {#浏览就激活active#}
+
+{% block content %}
+    <h3 class="home-content">欢迎来到三千的个人网站</h3>
+
+ <!-- 图表容器 DOM -->
+    <div id="container" ></div>
+     <!-- 引入 highcharts.js -->
+    <div class="hot-data">
+        <h3>今天24小时内的热门点击</h3>
+        <ul>
+            {% for hot_data in today_hot_data %}
+                <li><a href="{% url 'article_detail' hot_data.content_object.pk %}">{{ hot_data.content_object.title }}</a>
+                    ({{ hot_data.read_num }})</li>
+            {% empty %}
+                今天暂无点击
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="hot-data">
+        <h3>一周内的热门点击文章</h3>
+        <ul>
+            {% for hot_article in hot_articles_for_7_days %}
+                <li><a href="{% url 'article_detail' hot_article.id %}">{{ hot_article.title }}</a>
+                    ({{ hot_article.read_num_sum }})</li>
+            {% empty %}
+                今天暂无点击
+            {% endfor %}
+        </ul>
+    </div>
+
+     <script>
+        // 图表配置
+        var options = {
+            chart: {
+                type: 'line'                          //指定图表的类型，默认是折线图（line）
+            },
+            title: {
+                text: '一周内博客阅读量'                 // 标题
+            },
+            xAxis: {
+                categories: {{ dates|safe}},
+                tickmarkPlacement: 'on',                                   // x 轴分类,  x轴一般就是文字分类
+            },
+            yAxis: {
+                title: { text: null },                  // y 轴标题,  y轴一般就是数据},
+                labels:{ enabled: false },
+                gridLineDashStyle: 'Dash',
+            },
+            series: [{                              // 数据列
+                name: '阅读量',                        // 数据列名
+                data: {{ read_num }}                     // 数据
+            }
+            ],
+            plotOptions: {
+                line:{
+                    dataLabels:{
+                            enabled: true
+                    }
+                }
+            }
+        };
+        // 图表初始化函数
+        var chart = Highcharts.chart('container', options);
+     </script>
+{% endblock %}
+
+

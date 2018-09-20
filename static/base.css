@@ -1,0 +1,8 @@
+{#网页zuo边距都是0  *代表所有内容#}
+    * {
+        margin: 0px;
+        padding: 0px;
+    }
+    body{
+        margin-top: 70px!important;
+    }

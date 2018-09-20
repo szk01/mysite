@@ -1,0 +1,30 @@
+ul.articles-type{
+	list-style-type: none;
+}
+
+div.article.h3{
+	margin-top: 0.5em;   {# 标题的上边距，em可以被继承，大小不固定，最开始1em = 10px#}
+}
+
+div.paginator {
+    text-align: center;
+}
+
+ul.article-info-description{
+	list-style-type: none;
+	margin-bottom: 2em;
+}
+
+ul.article-info-description li{
+	display: inline-block;
+	margin-right: 2em;
+}
+
+div.article-content{
+	text-indent: 2em;
+}
+
+div.article-more{
+    margin-top: 1em;
+}
+
